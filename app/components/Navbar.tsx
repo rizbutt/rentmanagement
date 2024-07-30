@@ -52,7 +52,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSelect, toggleDarkMode }) => {
           {companyProfile && (
             <>
               <img src={companyProfile.logo} alt="Business Logo" className="h-14 w-24 object-cover rounded-full" />
-              <h1 className="text-3xl font-bold ml-4">{companyProfile.businessDetails?.name || 'Property Management'}</h1>
+              <h1 className="text-3xl font-bold ml-4">{companyProfile.name || 'Property Management'}</h1>
             </>
           )}
         </div>

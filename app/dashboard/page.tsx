@@ -59,7 +59,7 @@ const Dashboard = () => {
 
     switch (selectedForm) {
       case 'profile':
-        return <ProfileForm onClose={onClose} />;
+        return <ProfileForm onClose={onClose} action={selectedAction} />;
       case 'property':
         return <PropertyForm onClose={onClose} action={selectedAction} />;
       case 'tenant':
@@ -165,13 +165,13 @@ const Dashboard = () => {
           {companyProfile ? (
             <div className="space-y-4">
               <p>
-                <strong>Business Name:</strong> {companyProfile.businessDetails?.name || 'N/A'}
+                <strong>Business Name:</strong> {companyProfile.name || 'N/A'}
               </p>
               <p>
-                <strong>Business Address:</strong> {companyProfile.businessDetails?.address || 'N/A'}
+                <strong>Business Address:</strong> {companyProfile.address || 'N/A'}
               </p>
               <p>
-                <strong>Business Contact:</strong> {companyProfile.businessDetails?.contact || 'N/A'}
+                <strong>Business Contact:</strong> {companyProfile.contact || 'N/A'}
               </p>
               <p>
                 <strong>Keywords:</strong> {companyProfile.keywords?.map((keyword: string) => (

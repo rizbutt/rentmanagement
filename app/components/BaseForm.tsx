@@ -51,7 +51,7 @@ const BaseForm: React.FC<BaseFormProps> = ({ initialValues, onSubmit, validate, 
               />
             )}
             {field.icon && (
-              <FontAwesomeIcon icon={field.icon} className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400" />
+              <FontAwesomeIcon icon={field.icon} className="absolute inset-y-0 left-0 mt-4 pl-3 flex items-center text-gray-400" />
             )}
             {errors[field.name] && (
               <p className="text-red-500 text-xs mt-1">{errors[field.name]}</p>

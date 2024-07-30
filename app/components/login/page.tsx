@@ -126,7 +126,7 @@ export default function LoginForm() {
                 errors.password ? 'border-red-500' : ''
               }`}
             />
-            <FontAwesomeIcon icon={faLock} className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400" />
+            <FontAwesomeIcon icon={faLock} className="absolute inset-y-0 left-0 mt-4 pl-3 flex items-center text-gray-400" />
           </div>
           {errors.password && (
             <p className="text-red-500 text-xs mt-1">

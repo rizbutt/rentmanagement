@@ -11,11 +11,9 @@ interface ProfileFormProps {
 interface Profile {
   _id: string;
   logo: string;
-  businessDetails: {
-    name: string;
-    address: string;
-    contact: string;
-  };
+  name: string;
+  address: string;
+  contact: string;
   keywords: string[];
 }
 
@@ -25,23 +23,21 @@ interface Profile {
 const ProfileForm: React.FC<ProfileFormProps> = ({ onClose, action }) => {
   const initialValues = {
     logo: '',
-    businessDetails: {
-      name: '',
-      address: '',
-      contact: '',
-    },
+    name: '',
+    address: '',
+    contact: '',
     keywords: '',
   };
 
-  const [profiles, setProfiles] = useState<Profile[]>([]);
   const [selectedProfile, setSelectedProfile] = useState<string | undefined>(undefined);
   const [formValues, setFormValues] = useState(initialValues);
+  const [profiles, setProfiles] = useState<Profile[]>([]); // Initialize profiles as an empty array
 
   const fields = [
     { name: 'logo', label: 'Logo URL', type: 'text', icon: faImage },
-    { name: 'businessDetails.name', label: 'Business Name', type: 'text', icon: faBuilding },
-    { name: 'businessDetails.address', label: 'Address', type: 'text', icon: faMapMarkerAlt },
-    { name: 'businessDetails.contact', label: 'Contact', type: 'text', icon: faPhone },
+    { name: 'name', label: 'Business Name', type: 'text', icon: faBuilding },
+    { name: 'address', label: 'Address', type: 'text', icon: faMapMarkerAlt },
+    { name: 'contact', label: 'Contact', type: 'text', icon: faPhone },
     { name: 'keywords', label: 'Keywords (comma separated)', type: 'text', icon: faKey },
   ];
 
@@ -61,7 +57,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onClose, action }) => {
   const onSubmit = async (values: Record<string, any>) => {
     try {
       let response: any;
-      values.keywords = values.keywords.split(',').map((keyword: string) => keyword.trim());
+      const processedKeywords = values.keywords.split(',').map((keyword: string) => keyword.trim()).filter((keyword: string) => keyword !== '');
+      values.keywords = processedKeywords;
+
       if (action === 'create') {
         response = await axiosInstance.post('/api/profile', values);
       } else if (action === 'update') {
@@ -79,9 +77,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onClose, action }) => {
   const validate = (values: Record<string, any>) => {
     const errors: Record<string, string> = {};
     if (!values.logo) errors.logo = 'Logo URL is required';
-    if (!values.businessDetails.name) errors['businessDetails.name'] = 'Business Name is required';
-    if (!values.businessDetails.address) errors['businessDetails.address'] = 'Address is required';
-    if (!values.businessDetails.contact) errors['businessDetails.contact'] = 'Contact is required';
+    if (!values.name) errors.name = 'Business Name is required';
+    if (!values.address) errors.address = 'Address is required';
+    if (!values.contact) errors.contact = 'Contact is required';
     if (!values.keywords) errors.keywords = 'Keywords are required';
     return errors;
   };
@@ -96,11 +94,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onClose, action }) => {
         // Populate the form with the selected profile data
         setFormValues({
           logo: profile.logo,
-          businessDetails: {
-            name: profile.businessDetails.name,
-            address: profile.businessDetails.address,
-            contact: profile.businessDetails.contact,
-          },
+          name: profile.name,
+          address: profile.address,
+          contact: profile.contact,
           keywords: profile.keywords.join(', '),
         });
       }
@@ -118,11 +114,15 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onClose, action }) => {
             className="mt-1 block w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"
           >
             <option value="">Select a profile</option>
-            {profiles.map((profile: Profile) => (
-              <option key={profile._id} value={profile._id}>
-                {profile.businessDetails.name}
-              </option>
-            ))}
+            {profiles.length > 0 ? (
+              profiles.map((profile: Profile) => (
+                <option key={profile._id} value={profile._id}>
+                  {profile.name}
+                </option>
+              ))
+            ) : (
+              <option disabled>No profiles available</option>
+            )}
           </select>
         </div>
       ) : null}
