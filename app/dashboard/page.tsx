@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faUsers, faDollarSign, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import axiosInstance from '../utils/axiosInstance';
 import "../globals.css";
-import withAuth from '../utils/withAuth';
+// import withAuth from '../utils/withAuth';
 
 const Dashboard = () => {
   const [selectedForm, setSelectedForm] = useState<string | null>(null);
@@ -254,6 +254,9 @@ const Dashboard = () => {
             <p className="mb-4 text-gray-300">Manage rent collection and dues</p>
             <button onClick={() => handleSelectForm('rent')} className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition duration-150">Manage Rent</button>
           </div>
+
+
+          {/* property */}
           <div className="bg-gray-800 text-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 text-center">
             <FontAwesomeIcon icon={faBuilding} size="2x" className="text-yellow-500 mb-4" />
             <h3 className="text-2xl font-bold mb-2">Properties</h3>
@@ -269,4 +272,5 @@ const Dashboard = () => {
   );
 };
 
-export default withAuth(Dashboard);
+// export default withAuth(Dashboard);
+export default Dashboard;
