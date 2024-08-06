@@ -8,27 +8,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: '#1D4ED8', // Custom color for primary elements
-        secondary: '#4B5563', // Custom color for secondary elements
-      },
-      fontFamily: {
-        sans: ['Roboto', 'sans-serif'], // Custom font stack
-      },
-      spacing: {
-        '128': '32rem',  // Custom spacing value
-      },
-      boxShadow: {
-        'custom': '0 4px 6px rgba(0, 0, 0, 0.1)', // Custom shadow
-      },
-      gradientColorStops: {
-        'primary': '#1D4ED8',
-        'secondary': '#4B5563',
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
   },
-  plugins: [
-    // Add custom plugins if needed
-  ],
+  plugins: [],
 };
 export default config;
