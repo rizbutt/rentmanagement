@@ -1,73 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server';
-import TenantService from '../../services/TenantService';
-import dbConnect from '../../utils/dbConnect';
+import TenantService from '@/services/tenant_service';
+import dbConnect from '@/utils/db_connect_util';
+import { authMiddleware } from '@/middlewares/auth_middleware';
+import { ExtendedNextRequest } from '@/types/extended_next_request';
+import { validateModelData } from '@/utils/validation_util';
 
-// Function to handle POST requests for creating a tenant
-export async function POST(req: NextRequest) {
+export async function POST(req: ExtendedNextRequest) {
   await dbConnect();
   const tenantService = new TenantService();
-
-  try {
-    const createTenantDTO = await req.json();
-    const newTenant = await tenantService.createTenant(createTenantDTO);
-    return NextResponse.json(newTenant, { status: 201 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'An unexpected error occurred' },
-      { status: 500 }
-    );
+  
+  const isAuthenticated = await authMiddleware(req);
+  if (!isAuthenticated) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-}
-
-// Function to handle PUT requests for updating a tenant
-export async function PUT(req: NextRequest) {
-  await dbConnect();
-  const tenantService = new TenantService();
 
   try {
-    const tenantIdToUpdate = req.nextUrl.searchParams.get('tenantId') as string;
-    const updateTenantDTO = await req.json();
-    const updatedTenant = await tenantService.updateTenant(tenantIdToUpdate, updateTenantDTO);
-    return NextResponse.json(updatedTenant, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'An unexpected error occurred' },
-      { status: 500 }
-    );
-  }
-}
+    const user_id = req.user?.id; // Extract user ID from authenticated user
 
-// Function to handle GET requests for fetching tenants
-export async function GET(req: NextRequest) {
-  await dbConnect();
-  const tenantService = new TenantService();
-
-  try {
-    const tenantIdToGet = req.nextUrl.searchParams.get('tenantId') as string;
-    if (tenantIdToGet) {
-      const tenant = await tenantService.getTenant(tenantIdToGet);
-      return NextResponse.json(tenant, { status: 200 });
-    } else {
-      const tenants = await tenantService.getTenants();
-      return NextResponse.json(tenants, { status: 200 });
+    if (!user_id) {
+      return NextResponse.json({ error: 'User ID not found' }, { status: 400 });
     }
-  } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'An unexpected error occurred' },
-      { status: 500 }
-    );
-  }
-}
+    
+   
+  
+    const tenantData = { 
+      ...await req.json(),
+      user_id: user_id, // Attach user ID to tenant data
+    };
 
-// Function to handle DELETE requests for deleting a tenant
-export async function DELETE(req: NextRequest) {
-  await dbConnect();
-  const tenantService = new TenantService();
+      // check if user input data correct and data type
 
-  try {
-    const tenantIdToDelete = req.nextUrl.searchParams.get('tenantId') as string;
-    await tenantService.deleteTenant(tenantIdToDelete);
-    return NextResponse.json({ message: 'Tenant deleted' }, { status: 200 });
+    const modelName = 'Tenant'; 
+    const validationError = await validateModelData(modelName, tenantData);
+
+    if (validationError) {
+      return NextResponse.json({
+        error: 'Bad Request',
+        message: validationError,
+      }, { status: 400 });
+    }
+
+    const newTenant = await tenantService.createTenant(tenantData);
+    return NextResponse.json(newTenant, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'An unexpected error occurred' },

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
-import AuthService from '../../../services/AuthService';
-import dbConnect from '../../../utils/dbConnect';
+import AuthService from '../../../../services/auth_service';
+import dbConnect from '../../../../utils/db_connect_util';
 
 export async function POST(req: NextRequest) {
   await dbConnect();
