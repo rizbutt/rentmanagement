@@ -49,3 +49,36 @@ export async function POST(req: ExtendedNextRequest) {
     );
   }
 }
+
+
+/*
+ get relevant Tenant data to show user and then user 
+ select that data to fill relavant form connected to Tenant
+ */
+
+ 
+ export async function GET(req: ExtendedNextRequest) {
+  await dbConnect();
+  const tenant_service=new TenantService()
+
+  const isAuthenticated = await authMiddleware(req);
+
+  if (!isAuthenticated) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const user_id = req.user?.id; // Extract user ID from authenticated user
+
+    if (!user_id) {
+      return NextResponse.json({ error: 'User ID not found' }, { status: 400 });
+    } 
+    
+  
+    const fetched_Tenant_data = await tenant_service.fetchTenants(user_id); // Save Tenant to database
+    return NextResponse.json(fetched_Tenant_data, { status: 200 });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
+  }
+}

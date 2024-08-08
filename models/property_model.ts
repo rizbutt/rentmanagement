@@ -1,4 +1,4 @@
-import { IProperty } from "@/types/property_type";
+import { IProperty } from "@/types/models_types/property_type";
 import mongoose, { Model, Schema } from "mongoose";
 
 const PropertySchema: Schema = new Schema<IProperty>({
@@ -37,6 +37,8 @@ const PropertySchema: Schema = new Schema<IProperty>({
       rentStartDate: { type: Date },
     },
     buildingDetails: {
+      name:{ type: String, required: true },
+      address: { type: String, required: true },
       rooms: { type: Number, required: true },
       kitchens: { type: Number, required: true },
       lobbies: { type: Number, required: true },
@@ -50,11 +52,11 @@ const PropertySchema: Schema = new Schema<IProperty>({
         rooms: { type: Number },
         kitchens: { type: Number},
         bathrooms: { type: Number },
-        rentAmount: { type: Number },
+        lobbies: { type: Number },
       },
     ],
     building_images: [{
-      path: { type: String, required: true },
+      data: { type: Buffer, required: true },
       description: { type: String }
     }], // Storing Base64 strings
     user_id:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},

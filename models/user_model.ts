@@ -1,12 +1,14 @@
 import mongoose, { Schema, Model } from 'mongoose';
 import crypto from 'crypto';
-import { IUser } from '@/types/user_type';
+import { IUser } from '@/types/models_types/user_type';
 
 const UserSchema = new Schema<IUser>({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     resetPasswordToken: { type: String },
     resetPasswordExpires: { type: Date },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
   });
   
   
