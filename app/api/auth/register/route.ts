@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const authService = new AuthService();
     const registerData = await req.json();
     const user = await authService.register(registerData);
-    return NextResponse.json(user);
+    return NextResponse.json(user,{ status: 201 });
   } catch (error) {
     let errorMessage = 'An unexpected error occurred';
     if (error instanceof Error) {
