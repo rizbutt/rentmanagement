@@ -2,7 +2,7 @@ import UserRepository from '../repositories/auth_repository';;
 import { isValidEmail } from '../utils/validation_util';
 import bcrypt from 'bcrypt';
 import User from '../models/user_model';
-import { IUser } from '@/types/user_type';
+import { IUser } from '@/types/models_types/user_type';
 
 class AuthService {
   private userRepository: UserRepository;
