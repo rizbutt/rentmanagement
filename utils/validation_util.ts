@@ -8,6 +8,8 @@ export function isValidEmail(email: string): boolean {
 import Property from '../models/property_model';
 import Tenant from '../models/tenant_model';
 import User from  '../models/user_model'
+import Rent from '@/models/rent_model';
+import Expense from '@/models/expense_model';
 
 export async function validateModelData(modelName: string, data: Record<string, any>): Promise<string | null> {
   try {
@@ -23,6 +25,14 @@ export async function validateModelData(modelName: string, data: Record<string, 
         const tenant = new Tenant(data);
         await tenant.validate(); // Validates the data based on the Tenant schema
         break;
+      case 'Rent':
+        const rent = new Rent(data);
+        await rent.validate(); // Validates the data based on the Tenant schema
+        break;
+      case 'Expense':
+        const expense = new Expense(data);
+        await expense.validate(); // Validates the data based on the Tenant schema
+        break;      
       default:
         return `Unknown model: ${modelName}`;
     }
