@@ -16,4 +16,6 @@ COPY . .
 
 # Expose port and start the app
 EXPOSE 3000
+
+
 CMD ["npm", "run","dev"]
